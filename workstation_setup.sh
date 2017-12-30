@@ -82,6 +82,8 @@ mlpy2venv() {
     pandas \
     scipy \
     sklearn \
+    keras \
+    tqdm \
     && \
     python -m ipykernel.kernelspec
   pip install --upgrade tensorflow-gpu
