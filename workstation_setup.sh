@@ -91,7 +91,7 @@ mlpy2venv() {
   deactivate
 }
 
-mlpy2venv() {
+mlpy3venv() {
   if [ -d "~/Projects" ] ; then
     mkdir ~/Projects
   fi
