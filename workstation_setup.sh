@@ -91,6 +91,32 @@ mlpy2venv() {
   deactivate
 }
 
+mlpy2venv() {
+  if [ -d "~/Projects" ] ; then
+    mkdir ~/Projects
+  fi
+  virtualenv --system-site-packages -p python3 ~/Projects/mlpy3venv
+  source ~/Projects/mlpy3venv/bin/activate
+  easy_install -U pip
+  pip3 --no-cache-dir install \
+    Pillow \
+    h5py \
+    ipykernel \
+    jupyter \
+    matplotlib \
+    numpy \
+    pandas \
+    scipy \
+    sklearn \
+    keras \
+    tqdm \
+    && \
+    python -m ipykernel.kernelspec
+  pip3 install --upgrade tensorflow-gpu
+  # pip3 install --upgrade https://storage.googleapis.com/tensorflow/linux/cpu/protobuf-3.1.0-cp35-none-linux_x86_64.whl
+  deactivate
+}
+
 # CUDA drivers
 # Does the system have a NVIDIA GPU
 CUDA_CAPABLE=0
@@ -103,6 +129,8 @@ if [ $CUDA_CAPABLE -ne 0 ]; then
   install_cuda
   # Install tensorflow and ml packages in a virtual env
   mlpy2venv
+  # Install tensorflow and ml packages in a virtual env (python 3)
+  mlpy3venv
 
   echo "Restart your computer now"
 else
