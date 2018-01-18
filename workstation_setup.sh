@@ -1,16 +1,45 @@
-# ASSUMES Ubuntu 17.10
+# ASSUMES Ubuntu 16.04
 
-# Install build-essential, Git, Tmux
+# Conf to get Yubikey working
+# https://www.yubico.com/support/knowledge-base/categories/articles/can-set-linux-system-use-u2f/
+curl https://raw.githubusercontent.com/Yubico/libu2f-host/master/70-u2f.rules | sudo tee /etc/udev/rules.d/70-u2f.rules > /dev/null
+# REBOOT
+
+# Install Essentials
 sudo apt-get update
-sudo apt-get install build-essential git tmux
+sudo apt-get install build-essential git tmux xclip
+
+# Create SSH key
+ssh-keygen -t rsa -b 4096 -C "sumitgt007@gmail.com"
+ssh-add ~/.ssh/id_rsa
+xclip -sel clip < ~/.ssh/id_rsa.pub
+# Add to github
+echo "SSH public key copied to clipboard. Add it to your github account now."
+echo "Press any key to continue."
+read any_key
+
+# Create GPG key
+echo "NOTE: Choose (RSA and RSA), length 4096"
+gpg --gen-key
+gpg_key_id=$(gpg --list-secret-keys --keyid-format LONG | sed -n -e 's/^sec .*4096R\///p' | sed -n -e 's/\s.*//p')
+gpg --armor --export $gpg_key_id | xclip -sel clip
+# Add to github
+echo "GPG public key copied to clipboard. Add it to your github account now."
+echo "Press any key to continue."
+read any_key
+# Configure git for key signing
+git config --global commit.gpgsign true
+git config --global user.signingkey $gpg_key_id
+
 
 # Install Python stuff
 sudo apt-get update
-sudo apt-get install python3-pip python3-dev python-virtualenv
-sudo apt-get install python-pip python-dev python-virtualenv
+sudo apt-get install python3-pip python3-dev python-pip python-dev python-virtualenv
 
 # Tmux conf
-cp .tmux.conf ~
+cat > ~/.tmux.conf <<EOF
+set -g mouse on
+EOF
 
 # Git config
 git config --global user.name "Sumit Gouthaman"
