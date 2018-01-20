@@ -7,7 +7,7 @@ curl https://raw.githubusercontent.com/Yubico/libu2f-host/master/70-u2f.rules | 
 
 # Install Essentials
 sudo apt-get update
-sudo apt-get install build-essential git tmux xclip
+sudo apt-get install build-essential git tmux xclip redshift-gtk
 
 # Create SSH key
 ssh-keygen -t rsa -b 4096 -C "sumitgt007@gmail.com"
@@ -63,14 +63,17 @@ options nouveau modeset=0
 EOF
 '
   sudo update-initramfs -u
-  wget 'https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/cuda-repo-ubuntu1604_8.0.61-1_amd64.deb'
-  sudo dpkg -i cuda-repo-ubuntu1604_8.0.61-1_amd64.deb
+  wget 'https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda-repo-ubuntu1604-8-0-local-ga2_8.0.61-1_amd64-deb'
+  sudo dpkg -i cuda-repo-ubuntu1604-8-0-local-ga2_8.0.61-1_amd64-deb
   sudo apt-get update
-  sudo apt-get install cuda=8.0.61-1 # Note specific version
+  sudo apt-get install cuda # Note specific version
+  wget 'https://developer.nvidia.com/compute/cuda/8.0/Prod2/patches/2/cuda-repo-ubuntu1604-8-0-local-cublas-performance-update_8.0.61-1_amd64-deb'
+  sudo dpkg -i cuda-repo-ubuntu1604-8-0-local-cublas-performance-update_8.0.61-1_amd64-deb
 
   echo "Download the following from NVidia website after logging in"
-  echo "https://developer.nvidia.com/compute/machine-learning/cudnn/secure/v6/prod/8.0_20170307/Ubuntu16_04_x64/libcudnn6_6.0.20-1+cuda8.0_amd64-deb"
-  echo "https://developer.nvidia.com/compute/machine-learning/cudnn/secure/v6/prod/8.0_20170307/Ubuntu16_04_x64/libcudnn6-dev_6.0.20-1+cuda8.0_amd64-deb"
+  echo "https://developer.nvidia.com/rdp/cudnn-download":
+  echo "1. cuDNN v6.0 Runtime Library for Ubuntu16.04 (Deb)"
+  echo "2. cuDNN v6.0 Developer Library for Ubuntu16.04 (Deb)"
 
   echo "Press any key after you have downloaded the above 2 deb files."
   read input
@@ -95,11 +98,11 @@ EOF
 }
 
 mlpy2venv() {
-  if [ -d "~/Projects" ] ; then
-    mkdir ~/Projects
+  if [ -d "~/Venv" ] ; then
+    mkdir ~/Venv
   fi
-  virtualenv --system-site-packages ~/Projects/mlpy2venv
-  source ~/Projects/mlpy2venv/bin/activate
+  virtualenv --system-site-packages ~/Venv/mlpy2venv
+  source ~/Venv/mlpy2venv/bin/activate
   easy_install -U pip
   pip --no-cache-dir install \
     Pillow \
@@ -121,11 +124,11 @@ mlpy2venv() {
 }
 
 mlpy3venv() {
-  if [ -d "~/Projects" ] ; then
-    mkdir ~/Projects
+  if [ -d "~/Venv" ] ; then
+    mkdir ~/Venv
   fi
-  virtualenv --system-site-packages -p python3 ~/Projects/mlpy3venv
-  source ~/Projects/mlpy3venv/bin/activate
+  virtualenv --system-site-packages -p python3 ~/Venv/mlpy3venv
+  source ~/Venv/mlpy3venv/bin/activate
   easy_install -U pip
   pip3 --no-cache-dir install \
     Pillow \
