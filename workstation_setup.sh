@@ -52,6 +52,11 @@ sudo sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode s
 sudo apt-get update
 sudo apt-get install code # or code-insiders
 
+# Video editing
+sudo add-apt-repository ppa:openshot.developers/ppa
+sudo apt-get update
+sudo apt-get install openshot-qt
+
 # Function to install CUDA
 install_cuda () {
   echo "-- install_cuda --"
