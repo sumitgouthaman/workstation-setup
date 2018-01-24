@@ -3,7 +3,7 @@
 # Conf to get Yubikey working
 # https://www.yubico.com/support/knowledge-base/categories/articles/can-set-linux-system-use-u2f/
 curl https://raw.githubusercontent.com/Yubico/libu2f-host/master/70-u2f.rules | sudo tee /etc/udev/rules.d/70-u2f.rules > /dev/null
-# REBOOT
+sudo udevadm control --reload-rules
 
 # Install Essentials
 sudo apt-get update
@@ -56,6 +56,12 @@ sudo apt-get install code # or code-insiders
 sudo add-apt-repository ppa:openshot.developers/ppa
 sudo apt-get update
 sudo apt-get install openshot-qt
+
+# udev rules for phone for Android development
+sudo touch /etc/udev/rules.d/51-android.rules
+sudo bash -c 'cat > /etc/udev/rules.d/51-android.rules <<EOF
+SUBSYSTEM=="usb", ATTR{idVendor}=="18d1", MODE="0666", GROUP="plugdev"
+'
 
 # Function to install CUDA
 install_cuda () {
@@ -126,6 +132,14 @@ mlpy2venv() {
   pip install --upgrade tensorflow-gpu
   pip install --upgrade https://storage.googleapis.com/tensorflow/linux/cpu/protobuf-3.1.0-cp27-none-linux_x86_64.whl
   deactivate
+
+  cat >> ~/.bashrc <<EOF
+
+mlpy2 () {
+  cd ~/Project
+  source ~/Venv/mlpy2venv/bin/activate
+}
+EOF
 }
 
 mlpy3venv() {
@@ -152,6 +166,14 @@ mlpy3venv() {
   pip3 install --upgrade tensorflow-gpu
   # pip3 install --upgrade https://storage.googleapis.com/tensorflow/linux/cpu/protobuf-3.1.0-cp35-none-linux_x86_64.whl
   deactivate
+
+  cat >> ~/.bashrc <<EOF
+
+mlpy3 () {
+  cd ~/Project
+  source ~/Venv/mlpy3venv/bin/activate
+}
+EOF
 }
 
 # CUDA drivers
