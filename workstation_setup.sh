@@ -63,6 +63,12 @@ sudo bash -c 'cat > /etc/udev/rules.d/51-android.rules <<EOF
 SUBSYSTEM=="usb", ATTR{idVendor}=="18d1", MODE="0666", GROUP="plugdev"
 '
 
+# Create an alias to restart network manager (helps fix silly wifi issues)
+cat >> ~/.bashrc <<EOF
+
+alias netfix='sudo service network-manager restart'
+EOF
+
 # Function to install CUDA
 install_cuda () {
   echo "-- install_cuda --"
