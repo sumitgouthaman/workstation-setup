@@ -49,6 +49,7 @@ EOF
 # Tmux conf
 cat > ~/.tmux.conf <<EOF
 set -g mouse on
+set -g default-terminal "screen-256color"
 EOF
 
 # Git config
