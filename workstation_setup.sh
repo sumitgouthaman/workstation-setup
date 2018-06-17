@@ -7,7 +7,7 @@ sudo udevadm control --reload-rules
 
 # Install Essentials
 sudo apt-get update
-sudo apt-get install build-essential git tmux xclip redshift-gtk
+sudo apt-get -y install build-essential git tmux xclip redshift-gtk
 
 # Create SSH key
 ssh-keygen -t rsa -b 4096 -C "sumitgt007@gmail.com"
@@ -34,7 +34,17 @@ git config --global user.signingkey $gpg_key_id
 
 # Install Python stuff
 sudo apt-get update
-sudo apt-get install python3-pip python3-dev python-pip python-dev python-virtualenv
+sudo apt-get -y install python3-pip python3-dev python-pip python-dev python-virtualenv
+
+# Misc stuff related to data science
+sudo apt-get -y install pandoc
+
+# Install Go
+wget https://dl.google.com/go/go1.10.3.linux-amd64.tar.gz
+tar -C /usr/local -xzf go1.10.3.linux-amd64.tar.gz 
+cat >> ~/.profile <<"EOF"
+export PATH=$PATH:/usr/local/go/bin
+EOF
 
 # Tmux conf
 cat > ~/.tmux.conf <<EOF
@@ -50,12 +60,12 @@ curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microso
 sudo mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg
 sudo sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
 sudo apt-get update
-sudo apt-get install code # or code-insiders
+sudo apt-get -y install code # or code-insiders
 
 # Video editing
 sudo add-apt-repository ppa:openshot.developers/ppa
 sudo apt-get update
-sudo apt-get install openshot-qt
+sudo apt-get -y install openshot-qt
 
 # udev rules for phone for Android development
 sudo touch /etc/udev/rules.d/51-android.rules
@@ -72,7 +82,7 @@ EOF
 # Function to install CUDA
 install_cuda () {
   echo "-- install_cuda --"
-  sudo apt-get install linux-headers-$(uname -r)
+  sudo apt-get -y install linux-headers-$(uname -r)
   sudo touch /etc/modprobe.d/blacklist-nouveau.conf
   sudo bash -c 'cat > /etc/modprobe.d/blacklist-nouveau.conf <<EOF
 blacklist nouveau
@@ -83,7 +93,7 @@ EOF
   wget 'https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda-repo-ubuntu1604-8-0-local-ga2_8.0.61-1_amd64-deb'
   sudo dpkg -i cuda-repo-ubuntu1604-8-0-local-ga2_8.0.61-1_amd64-deb
   sudo apt-get update
-  sudo apt-get install cuda # Note specific version
+  sudo apt-get -y install cuda # Note specific version
   wget 'https://developer.nvidia.com/compute/cuda/8.0/Prod2/patches/2/cuda-repo-ubuntu1604-8-0-local-cublas-performance-update_8.0.61-1_amd64-deb'
   sudo dpkg -i cuda-repo-ubuntu1604-8-0-local-cublas-performance-update_8.0.61-1_amd64-deb
 
@@ -97,7 +107,7 @@ EOF
   sudo dpkg -i libcudnn6_6.0.21-1+cuda8.0_amd64.deb
   sudo dpkg -i libcudnn6-dev_6.0.21-1+cuda8.0_amd64.deb
 
-  sudo apt-get install libcupti-dev
+  sudo apt-get -y install libcupti-dev
 
   cat >> ~/.profile <<EOF
 if [ -d "/usr/local/cuda-8.0/bin" ] ; then
@@ -126,6 +136,7 @@ mlpy2venv() {
     h5py \
     ipykernel \
     jupyter \
+    nbconvert \
     matplotlib \
     numpy \
     pandas \
@@ -160,6 +171,7 @@ mlpy3venv() {
     h5py \
     ipykernel \
     jupyter \
+    nbconvert \
     matplotlib \
     numpy \
     pandas \
