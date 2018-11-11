@@ -74,6 +74,17 @@ sudo bash -c 'cat > /etc/udev/rules.d/51-android.rules <<EOF
 SUBSYSTEM=="usb", ATTR{idVendor}=="18d1", MODE="0666", GROUP="plugdev"
 '
 
+# Virtual box
+# https://www.virtualbox.org/wiki/Linux_Downloads
+sudo apt-get update
+wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo apt-key add -
+sudo add-apt-repository \
+  "deb [arch=amd64] https://download.virtualbox.org/virtualbox/debian \
+  $(lsb_release -cs) \
+  contrib"
+sudo apt-get update
+sudo apt-get install virtualbox-5.2
+
 # Install docker
 sudo apt-get update
 sudo apt-get install \
@@ -90,8 +101,12 @@ sudo add-apt-repository \
 sudo apt-get update
 sudo apt-get install docker-ce
 
-# Install minikube
+# Install kubectl
 sudo snap install kubectl --classic
+
+# Install minikube
+# or latest release from https://github.com/kubernetes/minikube/releases
+curl -Lo minikube https://storage.googleapis.com/minikube/releases/v0.30.0/minikube-linux-amd64 && chmod +x minikube && sudo cp minikube /usr/local/bin/ && rm minikube
 
 # Create an alias to restart network manager (helps fix silly wifi issues)
 cat >> ~/.bashrc <<EOF
