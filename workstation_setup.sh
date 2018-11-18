@@ -103,6 +103,7 @@ sudo apt-get install docker-ce
 
 # Install kubectl
 sudo snap install kubectl --classic
+echo "source <(kubectl completion bash)" >> ~/.bashrc
 
 # Install minikube
 # or latest release from https://github.com/kubernetes/minikube/releases
